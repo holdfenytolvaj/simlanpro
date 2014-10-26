@@ -1,0 +1,26 @@
+<?xml version="1.0" ?>
+<ivy-module version="2.0" xmlns:m="http://ant.apache.org/ivy/maven"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="http://ant.apache.org/ivy/schemas/ivy.xsd">
+  <info organisation="none" module="wiki">
+    <description>Check wikipedia language difficulty level</description>
+  </info>
+  <dependencies>
+    <dependency org="log4j" name="log4j" rev="1.2.16" />
+    <dependency org="org.slf4j" name="slf4j-log4j12" rev="1.6.1" />
+    <dependency org="commons-logging" name="commons-logging" rev="1.1.1" />
+    
+    <dependency org="org.apache.hadoop" name="hadoop-core" rev="1.2.1" />
+    <dependency org="org.apache.hadoop" name="hadoop-mapreduce-client" rev="2.5.1" />
+    
+    <dependency org="org.apache.pig" name="pig" rev="0.13.0" />
+    <dependency org="junit" name="junit" rev="4.11" />
+    <!-- 
+    <dependency org="com.google.guava" name="guava" rev="11.0" />
+    <dependency org="org.python" name="jython-standalone" rev="2.5.3"/>
+    <dependency org="org.mockito" name="mockito-all" rev="1.8.4"/>
+     -->
+     <dependency org="xerces" name="xercesImpl" rev="2.11.0"/>
+     
+  </dependencies>
+</ivy-module>

@@ -1,0 +1,58 @@
+<project xmlns:ivy="antlib:org.apache.ivy.ant" name="wiki language difficulty tester" default="build-with-test">
+    <path id="classpathDir">
+    	<fileset dir="lib" includes="**/*.jar" />
+    	<pathelement location="build/test"/>
+    	<pathelement location="build/main"/>
+    </path>
+	
+	<taskdef resource="org/apache/ivy/ant/antlib.xml" uri="antlib:org.apache.ivy.ant" classpathref="classpathDir"/>
+	
+    <target name="resolve" description="retrieve dependencies with ivy" >
+        <ivy:retrieve />
+    </target>
+	
+	<target name="clean">
+        <delete dir="build" />
+    </target>
+
+    <target name="setup">
+        <mkdir dir="build" />
+    	<copy includeemptydirs="false" todir="build">
+            <fileset dir="src">
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+
+    <target name="compile" depends="setup">
+        <javac srcdir="src/main" destdir="build/main" debug="on" debuglevel="lines,source" includes="**/*.java,**/*.xml,**/*.txt" includeantruntime="false">
+        	<classpath refid="classpathDir" />
+        </javac>
+    	<javac srcdir="src/test" destdir="build/test" debug="on" debuglevel="lines,source" includes="**/*.java,**/*.xml,**/*.txt" includeantruntime="false">
+            <classpath refid="classpathDir" />
+        </javac>
+    </target>
+
+	<target name="jar" depends="compile">
+        <jar jarfile="hadoopWiki.jar" basedir="build/main" />
+	</target>
+
+    <target name="test" depends="compile"  >
+    	<mkdir dir="build/testResult"/>
+        
+        <junit printsummary="on" haltonfailure="false" showoutput="true" fork="yes" > 
+            <classpath refid="classpathDir"/>
+            	
+            <formatter type="plain"/>
+
+            <batchtest todir="build/testResult" fork="yes">
+            <fileset dir="src/test" >
+                <include name="**/Test*.java" />
+            </fileset>
+            </batchtest>
+        </junit>
+    </target>
+	
+    <target name="build-with-test" depends="resolve, test, jar" />
+	
+</project>

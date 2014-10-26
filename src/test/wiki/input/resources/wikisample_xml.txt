@@ -1,0 +1,27 @@
+<page>
+    <title>数学</title>
+    <ns>0</ns>
+    <id>13</id>
+    <revision>
+      <id>32533148</id>
+      <parentid>32533127</parentid>
+      <timestamp>2014-09-02T15:52:08Z</timestamp>
+      <contributor>
+        <username>ㄑㄑㄑㄑ</username>
+        <id>1577013</id>
+      </contributor>
+      <minor />
+      <text xml:space="preserve">{{NoteTA|G1=Science}}
+{{Good article}}
+[[File:Euclid.jpg|right|thumb|200px|[[歐幾里得]]，西元前三世紀的希臘數學家，現在被認為是幾何之父，此畫為[[拉斐爾·聖齊奧|拉斐爾]]的作品《[[雅典學院 (畫作)|雅典學院]]》。]]
+
+'''数学'''（'''Mathematics'''）是利用符号语言研究[[數量]]&lt;ref name=&quot;OED&quot;&gt;{{cite web |url=http://oed.com/view/Entry/114974 |title=mathematics, ''n.'' |publisher=Oxford University Press |work=Oxford English Dictionary |year=2012 |accessdate=June 16, 2012 |quote=The science of space, number, quantity, and arrangement, whose methods involve logical reasoning and usually the use of symbolic notation, and which includes geometry, arithmetic, algebra, and analysis.}}{{en}}&lt;/ref&gt;、[[数学结构|结构]]&lt;ref name=&quot;Kneebone&quot;&gt;{{cite book |title=Mathematical Logic and the Foundations of Mathematics: An Introductory Survey |publisher=Dover |author=Kneebone, G.T. |year=1963 |pages=[http://books.google.com/books?id=tCXxf4vbXCcC&amp;pg=PA4 4] |isbn=0-486-41712-3 |quote=Mathematics ... is simply the study of abstract structures, or formal patterns of connectedness.}}{{en}}&lt;/ref&gt;、[[变化]]&lt;ref name=&quot;LaTorre&quot;&gt;{{cite book |title=Calculus Concepts: An Informal Approach to the Mathematics of Change |publisher=Cengage Learning |author=LaTorre, Donald R., John W. Kenelly, Iris B. Reed, Laurel R. Carpenter, and Cynthia R Harris |year=2011 |pages=[http://books.google.com/books?id=1Ebu2Tij4QsC&amp;pg=PA2 2] |isbn=1-4390-4957-2 |quote=Calculus is the study of change—how things change, and how quickly they change.}}{{en}}&lt;/ref&gt;&lt;ref name=&quot;Ramana&quot;&gt;{{cite book |title=Applied Mathematics |publisher=Tata McGraw–Hill Education |author=Ramana |year=2007 |page=[http://books.google.com/books?id=XCRC6BeKhIIC&amp;pg=SA2-PA10 2.10] |isbn=0-07-066753-5 |quote=The mathematical study of change, motion, growth or decay is calculus.}}{{en}}&lt;/ref&gt;以及[[空间 (数学)|空间]]&lt;ref name=OED/&gt;等概念的一門[[学科]]，从某种角度看屬於[[形式科學]]的一種。借助语言阐述关系（如数量、结构、前后变化等关系）>的学科，透過[[抽象化]]和[[逻辑|邏輯]][[推理]]的使用，由[[計數]]、[[计算|計算]]、[[量度]]和對物體[[形狀]]及[[運動 (物理學)|運動]]的觀察中產生。[[数学家|數學家]]們拓展這些概念，為了公式化新的[[猜想]]以及從選定
+的[[公理]]及[[定義]]中建立起[[严谨 (数学)|嚴謹]]推導出的定理。&lt;ref&gt;Jourdain&lt;/ref&gt;（注意：公式不仅仅涉及到数量的关系，也涉及到性质的关系）。
+
+基礎數學的知識與運用總是個人與團體生活中不可或缺的一環。其基本概念的精煉早在[[古埃及]]、[[美索不达米亚|美索不達米亞]]及[[印度历史|古印度]]內的古代數學文本便可觀見。從那時開始，其發展便持續不斷地小幅進展，至[[16世纪|16世紀]]的[[文艺复兴|文藝復興]]時期，因为新的[[科学|科學發現]]相作用而产生的數學革新導致了知識的加速发展，直至今日。&lt;ref&gt;Eves&lt;/ref&gt;
+</text>
+      <sha1>ge5mt3ppedvtmkih1lm6z5qe8deadz8</sha1>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+    </revision>
+</page>

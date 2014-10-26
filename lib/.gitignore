@@ -1,0 +1,4 @@
+*.jar
+!bzip2.jar
+!ivy-2.2.0.jar
+!wikixmlj-r43.jar
