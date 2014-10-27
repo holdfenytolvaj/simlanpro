@@ -34,7 +34,7 @@
     </target>
 
 	<target name="jar" depends="compile">
-        <jar jarfile="hadoopWiki.jar" basedir="build/main" />
+        <jar jarfile="simlanpro.jar" basedir="build/main" />
 	</target>
 
     <target name="test" depends="compile"  >
