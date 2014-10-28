@@ -4,6 +4,7 @@ import static java.util.regex.Pattern.compile;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -74,11 +75,14 @@ public class GetHskLevelsOfText extends EvalFunc<Tuple> {
 	}
 
 	private List<String> getAPossibleWordSplit(String sentence) {
-		Map<String, List<String>> cache = new HashMap<>();
-		return getAPossibleWordSplit(sentence, cache);
+		return getAPossibleWordSplit(sentence, new HashMap<String, List<String>>());
 	}
 
 	private List<String> getAPossibleWordSplit(String sentence, Map<String, List<String>> cache) {
+
+		if (sentence.isEmpty()) {
+			return Collections.emptyList();
+		}
 
 		if (cache.containsKey(sentence)) {
 			return new ArrayList<String>(cache.get(sentence));

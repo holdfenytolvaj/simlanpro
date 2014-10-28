@@ -14,6 +14,10 @@ import edu.jhu.nlp.wikipedia.PageCallbackHandler;
 import edu.jhu.nlp.wikipedia.WikiPage;
 import edu.jhu.nlp.wikipedia.WikiTextParser;
 
+/** 
+ * Very naive approach to calculate the difficulty level of a wikipedia page.
+ * Works with English language.
+ */
 public class WikiPageCallbackHandler implements PageCallbackHandler {
 	private final BufferedWriter bw;
 	private static final Pattern PATTERN_TO_REMOVE = compile("[\\p{P}\\p{S}\\d]+");

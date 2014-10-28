@@ -23,6 +23,7 @@ public class WikipediaPageXmlParser {
 	private static final Log LOGGER = LogFactory.getLog(WikipediaPageXmlParser.class);
 
 	/*
+	 * TODO commit to wikixmlj to make their cleaner a bit better... though it is very far from cleaning 
 	public static String getPlainText(String wikiText) {
 		String ANYTHING_EXCEPT_SQBRKT_COLUMN = "([^\\[\\]:]*)";
 		String ANYTHING_EXCEPT_SQBRKT_COLUMN_PIPE = "([^\\[\\]:|]*)";

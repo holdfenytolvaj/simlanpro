@@ -47,4 +47,10 @@ HSK words:
 --- Contact -----------------------------------------------------------------
 radicsge on gmail.com
 
+
+--- Quick overview ---------------------------------------------------------
+There were 3 ways of checking:
+classifier -> Directly reads the wikipedia xml file and check it, very basic, will be deleted later.
+hadoop -> using mapreduce to get word frequency
+pig -> it seems easiest of all to work with and reuse components. In the java there are only udf definitions. Probably this way leads victory ;). 
   

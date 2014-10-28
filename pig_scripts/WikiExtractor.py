@@ -1,3 +1,7 @@
+# simlanpro changes:
+# Only the clean function is used for now
+# TODO remove that is not needed
+
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 #
@@ -356,14 +360,8 @@ def make_anchor_tag(match):
     else:
         return anchor
 
-def to_unicode_or_bust(obj, encoding='utf-8'):
-    if isinstance(obj, basestring):
-        if not isinstance(obj, unicode):
-            obj = unicode(obj, encoding)
-    return obj
-
 @outputSchema("word:chararray")
-def clean(text, title):
+def clean(text, id):
     try:
         # FIXME: templates should be expanded
         # Drop transclusions (template, parser functions)
@@ -388,7 +386,6 @@ def clean(text, title):
         text = italic_quote.sub(r'&quot;\1&quot;', text)
         text = italic.sub(r'&quot;\1&quot;', text)
         text = quote_quote.sub(r'\1', text)
-        text2 = text
         text = text.replace("'''", '').replace("''", '&quot;')
             
 
@@ -455,7 +452,7 @@ def clean(text, title):
         return text
 
     except:
-        print "ERROR in text ... ignored : ", title
+        print "ERROR in text ... ignored : ", id
         return ""
 
 

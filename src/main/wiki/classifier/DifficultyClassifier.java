@@ -13,12 +13,15 @@ import edu.jhu.nlp.wikipedia.WikiXMLParser;
 import edu.jhu.nlp.wikipedia.WikiXMLParserFactory;
 
 /**
- * Read the wikipedia xml file,
- * read the word frequency
+ * Reads the wikipedia xml file,
+ * Reads the word frequency
  * 
- * 
+ * Create an output that can be read with the Analyzer
+ *
+ * Word frequency can be downloaded from
  * http://expsy.ugent.be/subtlex-ch/
- * 
+ * or generate it with the hadoop wordcount but that doesnt work for 
+ * the Chinese language.  
  */
 public class DifficultyClassifier {
 
@@ -30,7 +33,7 @@ public class DifficultyClassifier {
 		WikiXMLParser wxsp = WikiXMLParserFactory.getSAXParser(inputFilepath);
 		BufferedWriter bw = new BufferedWriter(new FileWriter(outputFilepath));
 
-		wxsp.setPageCallback(new WikiPageCallbackHandlerZhPerCharacter(bw, loadClassifier(classifierFilepath)));
+		wxsp.setPageCallback(new WikiPageCallbackHandlerZhPerWord(bw, loadClassifier(classifierFilepath)));
 		wxsp.parse();
 
 		bw.close();

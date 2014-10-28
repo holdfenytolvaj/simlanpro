@@ -10,6 +10,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Hard coded quick test for evaluate the hsk level of the articles (without hadoop)
+ * But pig is better for this, if not used these files can be deleted.
+ */
 public class Analyzer {
 
 	public static void main(String[] args) throws FileNotFoundException, IOException {

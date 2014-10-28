@@ -10,31 +10,37 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 
+import wiki.pig.udf.GetHskLevelsOfText;
 import edu.jhu.nlp.wikipedia.PageCallbackHandler;
 import edu.jhu.nlp.wikipedia.WikiPage;
 import edu.jhu.nlp.wikipedia.WikiTextParser;
 
+/** 
+ * Very naive approach to calculate the difficulty level of a wikipedia page.
+ * Works with Chinese language on word level.
+ */
 public class WikiPageCallbackHandlerZhPerWord implements PageCallbackHandler {
 	private final BufferedWriter bw;
-	private static final Pattern PATTERN_TO_REMOVE = compile("[\\p{P}\\p{S}\\d]+");
-	private final Map<String, Integer> classifier;
+	private final Map<String, Integer> dictionary;
+	private static final Pattern PATTERN_TO_REPLACE = compile("([^\\p{script=Han} ]+)");
 
 	public WikiPageCallbackHandlerZhPerWord(BufferedWriter bw, Map<String, Integer> classifier) throws IOException {
 		this.bw = bw;
-		this.classifier = classifier;
+		this.dictionary = classifier;
 	}
 
 	@Override
 	public void process(WikiPage page) {
 		Integer[] numberOfWordsPerLevel = new Integer[] { 0, 0, 0, 0, 0, 0, 0 };
 
-		StringTokenizer itr = new StringTokenizer(PATTERN_TO_REMOVE.matcher(new WikiTextParser(page.getText()).getPlainText().toLowerCase()).replaceAll(""));
+		GetHskLevelsOfText ghlot = new GetHskLevelsOfText();
+		StringTokenizer itr = new StringTokenizer(PATTERN_TO_REPLACE.matcher(new WikiTextParser(page.getText()).getPlainText().toLowerCase()).replaceAll(" "));
 		long wordCount = 0;
 		while (itr.hasMoreElements()) {
 			String sentence = itr.nextToken();
-			for (int i = 0; i < sentence.length() - 1; i++) {
-				String word = sentence.substring(i, i + 1);
-				Integer levelOfWord = classifier.get(word);
+
+			for (String word : ghlot.getAPossibleWordSplitForTest(sentence)) {
+				Integer levelOfWord = dictionary.get(word);
 				levelOfWord = (levelOfWord != null) ? levelOfWord : numberOfWordsPerLevel.length;
 				numberOfWordsPerLevel[levelOfWord - 1]++;
 				wordCount++;
