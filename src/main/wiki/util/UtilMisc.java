@@ -56,12 +56,11 @@ public class UtilMisc {
 	public static <T extends Comparable<T>> List<T> getDifferenceList(List<T> list, List<T> listToRemove) {
 		List<T> result = new ArrayList<>();
 		List<T> tmpToRemove = new ArrayList<>(listToRemove);
-		for (int i = 0; i < list.size(); i++) {
-			T e = list.get(i);
-			if (tmpToRemove.contains(e)) {
-				tmpToRemove.remove(e);
+		for (T element : list) {
+			if (tmpToRemove.contains(element)) {
+				tmpToRemove.remove(element);
 			} else {
-				result.add(e);
+				result.add(element);
 			}
 		}
 		return result;

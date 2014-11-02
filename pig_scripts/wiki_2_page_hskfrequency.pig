@@ -9,9 +9,9 @@ page = load '/wiki/znwiki/' using org.apache.pig.piggybank.storage.XMLLoader('pa
 
 extractedPages = FOREACH page GENERATE FLATTEN(PARSE_XMLWIKIPAGE(pageContent)) ;
 normalWikiPages = FILTER extractedPages BY isSpecialPage == false;
-parsedPages = FOREACH normalWikiPages GENERATE title, GET_HSK_LEVELS(wikiExtractor.clean(text, id));
+parsedPages = FOREACH normalWikiPages GENERATE title, FLATTEN(GET_HSK_LEVELS(wikiExtractor.clean(text, id)));
 
-STORE parsedPages INTO '/wiki/zn_page_output_1s' USING PigStorage (',');
+STORE parsedPages INTO '/wiki/zn_page_output_4s' USING PigStorage ('\t');
 -- dump parsedPages;
 
 

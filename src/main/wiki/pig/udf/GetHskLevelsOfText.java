@@ -55,8 +55,8 @@ public class GetHskLevelsOfText extends EvalFunc<Tuple> {
 			}
 		}
 
-		for (int i = 0; i < numberOfWordsPerLevel.length; i++) {
-			t.append(numberOfWordsPerLevel[i]);
+		for (Integer numOfWordsPerLevel : numberOfWordsPerLevel) {
+			t.append(numOfWordsPerLevel);
 		}
 		t.append(wordCount);
 
