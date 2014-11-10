@@ -18,7 +18,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import wiki.util.UtilMisc;
+import util.UtilMisc;
+import dictionary.DictionaryCh;
 
 @RunWith(JUnit4.class)
 public class TestGetHskLevelsOfText {
@@ -31,7 +32,7 @@ public class TestGetHskLevelsOfText {
 
 	@Before
 	public void setup() {
-		UtilMisc.initializeDictionaries(hskLevelByWord, hskWordsByLevel);
+		DictionaryCh.initializeDictionaries(hskLevelByWord, hskWordsByLevel);
 	}
 
 	@Test

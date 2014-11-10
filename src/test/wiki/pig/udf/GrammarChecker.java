@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import wiki.util.UtilMisc;
+import dictionary.DictionaryCh;
 
 public class GrammarChecker {
 	private Map<String, Integer> hskLevelByWord = new HashMap<>(8192);
@@ -15,7 +15,7 @@ public class GrammarChecker {
 	}
 
 	public GrammarChecker() {
-		UtilMisc.initializeDictionaries(hskLevelByWord, hskWordsByLevel);
+		DictionaryCh.initializeDictionaries(hskLevelByWord, hskWordsByLevel);
 		checkIfWordExistsWithDifferentLevelCharacter();
 		checkIfWordExistsInMultipleHskLevel();
 	}

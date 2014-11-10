@@ -3,7 +3,7 @@
 
 # =============================================================================
 # simlanpro changes:
-# Only the clean function is used for now
+# Only the clean function is used for now, that is modified for some degree
 # TODO remove that is not needed
 # =============================================================================
 

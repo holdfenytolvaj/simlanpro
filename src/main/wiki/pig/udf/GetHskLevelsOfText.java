@@ -18,7 +18,7 @@ import org.apache.pig.data.TupleFactory;
 import org.apache.pig.impl.logicalLayer.schema.Schema;
 import org.apache.pig.impl.logicalLayer.schema.Schema.FieldSchema;
 
-import wiki.util.UtilMisc;
+import dictionary.DictionaryCh;
 
 public class GetHskLevelsOfText extends EvalFunc<Tuple> {
 	private Map<String, Integer> hskLevelByWord = new HashMap<>(8192);
@@ -26,7 +26,7 @@ public class GetHskLevelsOfText extends EvalFunc<Tuple> {
 	private static final Pattern PATTERN_TO_REPLACE = compile("([^\\p{script=Han} ]+)");
 
 	public GetHskLevelsOfText() {
-		UtilMisc.initializeDictionaries(hskLevelByWord, new HashMap<Integer, List<String>>());
+		DictionaryCh.initializeDictionaries(hskLevelByWord, new HashMap<Integer, List<String>>());
 	}
 
 	@Override
