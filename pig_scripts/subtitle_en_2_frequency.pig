@@ -1,9 +1,21 @@
+-- pig -x local -f subtitle_en_frequency.pig 
+/*
+Need the following libs in the path:
+- stanford-corenlp-3.5.0-models.jar;
+- stanford-corenlp-3.5.0.jar;
+- joda-time
+- jollyday
+*/
 
 REGISTER ../simlanpro.jar;
-DEFINE GET_LANG_LEVELS subtitle.pig.udf.GetLanguageLevelOfText();
+DEFINE GET_LANG_LEVELS subtitle.pig.udf.GetLanguageLevelOfTextEn();
 
-textByFrame = load '/subtitle/en/sample' using subtitle.pig.input.SrtLoader() as (filmName: chararray, content: chararray);
-levelsByFrame = FOREACH textByFrame GENERATE FLATTEN(GET_LANG_LEVELS(filmName, content));
+-- textByFrame = load 'subtitle/en/sample' using subtitle.pig.input.SrtLoader() as (filmName: chararray, content: chararray);
+textByFrame = load 'subtitle/en/all/' using subtitle.pig.input.SrtLoader() as (filmName: chararray, content: chararray);
+-- textByFrame = load 'subtitle/en/debug/' using subtitle.pig.input.SrtLoader() as (filmName: chararray, content: chararray);
+
+levelsByFrame = FOREACH textByFrame GENERATE content, FLATTEN(GET_LANG_LEVELS(filmName, content));
+dump levelsByFrame;
 
 levelsByFilm = group levelsByFrame by id;
 levelsByFilmSum = FOREACH levelsByFilm GENERATE group,
@@ -15,7 +27,7 @@ levelsByFilmSum = FOREACH levelsByFilm GENERATE group,
                                                 SUM(levelsByFrame.rest) as rest,
                                                 SUM(levelsByFrame.wordcount) as wordcount;
 
-result = FOREACH levelsByFilmSum GENERATE title..,
+result = FOREACH levelsByFilmSum GENERATE group..,
                                 (100*l1/wordcount) as l1p,
                                 (100*(l1+l2)/wordcount) as l2p,
                                 (100*(l1+l2+l3)/wordcount) as l3p,
@@ -25,7 +37,7 @@ result = FOREACH levelsByFilmSum GENERATE title..,
 
 resultByl6  = order result by l6p;
 
--- STORE levelsByFilmSum INTO '/subtitle/en/sample_output' USING PigStorage ('\t');
+STORE resultByl6 INTO 'subtitle/en/outv2/' USING PigStorage ('\t');
 
 
 

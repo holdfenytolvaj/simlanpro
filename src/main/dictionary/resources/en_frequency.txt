@@ -4500,7 +4500,6 @@
 17	blanket	blankets
 17	intensities	intensity
 17	interim
-17	tries	try
 17	parameter	parameters
 17	slave	slaves
 16	laps	lap

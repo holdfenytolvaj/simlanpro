@@ -1,4 +1,4 @@
-package wiki.pig.udf;
+package dictionary;
 
 import java.util.HashMap;
 import java.util.List;
@@ -6,15 +6,15 @@ import java.util.Map;
 
 import dictionary.DictionaryCh;
 
-public class GrammarChecker {
+public class DictionaryChCheck {
 	private Map<String, Integer> hskLevelByWord = new HashMap<>(8192);
 	private Map<Integer, List<String>> hskWordsByLevel = new HashMap<>();
 
 	public static void main(String[] args) {
-		new GrammarChecker();
+		new DictionaryChCheck();
 	}
 
-	public GrammarChecker() {
+	public DictionaryChCheck() {
 		DictionaryCh.initializeDictionaries(hskLevelByWord, hskWordsByLevel);
 		checkIfWordExistsWithDifferentLevelCharacter();
 		checkIfWordExistsInMultipleHskLevel();
