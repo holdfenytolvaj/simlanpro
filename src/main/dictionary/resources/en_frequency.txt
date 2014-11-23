@@ -5,7 +5,7 @@
 21626	a.	a
 18214	in.	in
 16470	to	na	ta
-13655	of	haved	's	'ave	haves	have	'd	having	haveing	has	had	've
+13655	have	haved	's	'ave	haves	have	'd	having	haveing	has	had	've
 10878	it	't
 10241	i.	me	i
 9343	to
@@ -13,7 +13,7 @@
 8412	for
 7995	not	not.	n't	n
 7308	that
-6984	ye	ya	you	y'
+6984	you	ya	you	y'
 6575	with
 6475	on
 6081	they	them	'em
@@ -62,7 +62,7 @@
 1632	its
 1595	then
 1563	two	twos
-1549	mine	me	my
+1549	my	mine	me
 1542	out
 1524	about
 1520	think	thinked	thinking	thinks	thought
@@ -120,7 +120,7 @@
 716	even
 710	child	children	childs
 701	too
-700	putted	put	puts	putting
+700	put	puts	putting
 699	more
 699	here
 695	own.	own
@@ -169,7 +169,7 @@
 561	again
 559	never
 553	under
-552	tryed	tried	tries	trying	try
+552	try	tried	tries	trying	tryed
 549	service.	services	service
 535	call	called	calling	calls
 534	place's	place.	places	place
@@ -505,7 +505,7 @@
 210	roles	role
 209	else
 209	half
-208	sha	shall
+208	shall	sha
 208	lands	land	land.
 208	events	event
 207	whitest	whiter	white
@@ -876,7 +876,7 @@
 123	along
 123	previous
 123	maintain	maintains	maintaining	maintained
-123	brethren	brother	brothers
+123	brother	brothers
 123	france	france.
 123	publish	published	publishes	publishing
 123	suffers	suffering	sufferring	sufferred	suffer	suffered
@@ -1028,7 +1028,7 @@
 104	visit	visits
 104	libraries	library
 104	press	presses
-104	teaching	taught	teaches	teach
+104	teach	taught	teaches	teaching
 104	reveal	revealled	revealed	reveals	revealing
 104	dark
 104	sales

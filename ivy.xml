@@ -11,7 +11,7 @@
         <dependency org="org.slf4j" name="slf4j-log4j12" rev="1.6.1" />
         <dependency org="commons-logging" name="commons-logging" rev="1.1.1" />
         <dependency org="org.apache.hadoop" name="hadoop-mapreduce-client" rev="2.5.1" />
-        <dependency org="org.apache.pig" name="pig" rev="0.13.0" />
+        <!-- <dependency org="org.apache.pig" name="pig" rev="0.13.0" /> -->
         <dependency org="junit" name="junit" rev="4.11" />
         <dependency org="com.google.guava" name="guava" rev="18.0" />
 	    <!-- 
@@ -21,11 +21,15 @@
         <dependency org="xerces" name="xercesImpl" rev="2.11.0"/>
         
         <!-- === nlp ========================================= -->
+        <!-- coreNLP does not lemmatize comperative adjectives e.g. taller->tall --> 
         <dependency org="edu.stanford.nlp" name="stanford-corenlp" rev="3.5.0" >
             <artifact type="jar" name="stanford-corenlp" />
             <artifact type="jar" name="stanford-corenlp" m:classifier="models" />
         </dependency>
         
+        <!--
+        <dependency org="jwi" name="edu.mit.jwi" rev="2.3.3" />
+        -->
         <!-- === crawler ===================================== -->
         <dependency org="edu.uci.ics" name="crawler4j" rev="3.5"/>
   </dependencies>

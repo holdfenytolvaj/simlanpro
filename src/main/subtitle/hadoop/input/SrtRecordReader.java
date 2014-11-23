@@ -17,129 +17,165 @@ import org.apache.hadoop.mapreduce.TaskAttemptContext;
 import org.apache.hadoop.mapreduce.lib.input.FileSplit;
 
 public class SrtRecordReader extends RecordReader<Text, Text> {
-	//private static final Log LOGGER = LogFactory.getLog(SrtRecordReader.class);
+    //private static final Log LOGGER = LogFactory.getLog(SrtRecordReader.class);
 
-	private FileSplit fileSplit;
-	private BufferedReader br;
+    private FileSplit fileSplit;
+    private BufferedReader br;
 
-	private FileSystem fs;
-	private TaskAttemptContext taskAttemptContext;
+    private FileSystem fs;
+    private TaskAttemptContext taskAttemptContext;
 
-	private String filmName;
-	int frameCounter;
-	private Text currentKey;
-	private Text currentValue;
+    private String filmName;
+    int frameCounter;
+    private Text currentKey;
+    private Text currentValue;
 
-	private static Pattern number = Pattern.compile("\uFEFF?\\d+");
+    private static Pattern number = Pattern.compile("\uFEFF?\\d+");
 
-	@Override
-	public void initialize(InputSplit inputSplit, TaskAttemptContext taskAttemptContext) throws IOException, InterruptedException {
-		fileSplit = (FileSplit) inputSplit;
-		this.taskAttemptContext = taskAttemptContext;
-		fs = fileSplit.getPath().getFileSystem(taskAttemptContext.getConfiguration());
-		InputStream is;
-		if (fileSplit.getPath().getName().endsWith(".bz2") || fileSplit.getPath().getName().endsWith(".gz")) {
-			CompressionCodec codec = new CompressionCodecFactory(taskAttemptContext.getConfiguration()).getCodec(fileSplit.getPath());
-			is = codec.createInputStream(fs.open(fileSplit.getPath()));
-			filmName = fileSplit.getPath().getName().replaceAll("\\.(bz2|gz)$", "");
-		} else if (fileSplit.getPath().getName().endsWith(".srt")) {
-			is = fs.open(fileSplit.getPath());
-			filmName = fileSplit.getPath().getName().replaceAll("\\.srt$", "");
-		} else {
-			throw new NotImplementedException("Not expected file format for " + fileSplit.getPath().getName() + " only srt are supported.");
-		}
+    @Override
+    public void initialize(InputSplit inputSplit, TaskAttemptContext taskAttemptContext) throws IOException, InterruptedException {
 
-		br = new BufferedReader(new InputStreamReader(is));
-		frameCounter = 1;
+        fileSplit = (FileSplit) inputSplit;
+        this.taskAttemptContext = taskAttemptContext;
+        fs = fileSplit.getPath().getFileSystem(taskAttemptContext.getConfiguration());
+        InputStream is;
 
-		is.skip(fileSplit.getStart());
+        if (fileSplit.getPath().getName().endsWith(".bz2") || fileSplit.getPath().getName().endsWith(".gz")) {
+            CompressionCodec codec = new CompressionCodecFactory(taskAttemptContext.getConfiguration()).getCodec(fileSplit.getPath());
+            is = codec.createInputStream(fs.open(fileSplit.getPath()));
+            filmName = fileSplit.getPath().getName().replaceAll("\\.(bz2|gz)$", "");
+        } else if (fileSplit.getPath().getName().endsWith(".srt")) {
+            is = fs.open(fileSplit.getPath());
+            filmName = fileSplit.getPath().getName().replaceAll("\\.srt$", "");
+        } else {
+            throw new NotImplementedException("Not expected file format for " + fileSplit.getPath().getName() + " only srt are supported.");
+        }
 
-	}
+        br = new BufferedReader(new InputStreamReader(is));
+        frameCounter = 1;
 
-	@Override
-	public boolean nextKeyValue() throws IOException, InterruptedException {
-		try {
-			StringBuilder sb = new StringBuilder();
-			String line;
+        //is.skip(fileSplit.getStart());
+        System.out.println("0 reading file " + filmName);
+    }
 
-			while ((line = br.readLine()) != null) {
-				line = line.trim();
-				if (line.isEmpty()) {
-					continue;
-				}
-				break;
-			}
+    @Override
+    public boolean nextKeyValue() throws IOException, InterruptedException {
+        if (currentKey == null) {
+            StringBuilder sb = new StringBuilder();
+            String line;
+            while ((line = br.readLine()) != null) {
+                sb.append(line + " ");
+            }
+            String text = sb.toString().replaceAll("\uFEFF?", "")
+                .replaceAll("(\\s*\\d+\\s*)?\\d\\d:\\d\\d:\\d\\d([,\\.]\\d+)?\\s*-->\\s*\\d\\d:\\d\\d:\\d\\d([,\\.]\\d+)?", " ") //srt
+                .replaceAll("\\s*\\{\\d+\\}\\{\\d+\\}\\s*", " "); //sub
 
-			if (line == null) {
-				currentKey = null;
-				currentValue = null;
-				return false;
-			}
+            currentKey = new Text(filmName);
+            currentValue = new Text(text);
+            return true;
+        } else {
+            currentKey = null;
+            currentValue = null;
+            System.out.println("Finished file " + filmName);
+            return false;
+        }
+    }
 
-			//make it strict, to discover issues asap
-			//--- frame number -------------------------------
-			if (!number.matcher(line).matches()) {
-				throw new NotImplementedException("Not expected line: " + line);
-			}
-			if (frameCounter == 1) {
-				line = line.replaceAll("\uFEFF?", "");//some file starts with BOM
-			}
+    //@Override
+    public boolean nextKeyValuePerLine() throws IOException, InterruptedException {
+        try {
+            StringBuilder sb = new StringBuilder();
+            String line;
 
-			//--- timing -------------------------------------
-			br.readLine();//we can ignore this
+            while ((line = br.readLine()) != null) {
+                line = line.trim();
+                if (line.isEmpty()) {
+                    continue;
+                }
+                break;
+            }
 
-			//--- text ---------------------------------------
-			while ((line = br.readLine()) != null) {
-				line = line.trim();
+            if (line == null) {
+                currentKey = null;
+                currentValue = null;
+                System.out.println("Finished file " + filmName);
+                return false;
+            }
 
-				if (line.isEmpty()) {
-					break;
-				}
-				sb.append(line + " ");
-			}
+            //--- frame number -------------------------------
+            while (!number.matcher(line).matches()) {
+                //throw new NotImplementedException("Not expected line: " + line);
+                //simply ignore it instead
+                System.out.println("Not expected line: " + line + " in file: " + filmName);
 
-			if (sb.length() == 0) {
-				currentKey = null;
-				currentValue = null;
-				return false;
-			}
+                line = br.readLine();
+                if (line == null) {
+                    currentKey = null;
+                    currentValue = null;
+                    System.out.println("Finished file " + filmName);
+                    return false;
+                }
+            }
+            if (frameCounter == 1) {
+                line = line.replaceAll("\uFEFF?", "");//some file starts with BOM
+            }
 
-			frameCounter++;
+            //--- timing -------------------------------------
+            br.readLine();//we can ignore this
 
-			currentKey = new Text(filmName);
-			currentValue = new Text(sb.toString());
+            //--- text ---------------------------------------
+            while ((line = br.readLine()) != null) {
+                line = line.trim();
 
-			//if (frameCounter % 1000 == 0) {
-			//	System.out.println(filmName + " position " + frameCounter);
-			//}
+                if (line.isEmpty()) {
+                    break;
+                }
+                sb.append(line + " ");
+            }
 
-			return true;
-		} catch (Exception e) {
-			System.out.println("The file has some problem (maybe not srt?): " + filmName);
-			System.out.println(e.getMessage());
-			System.out.println(e.getStackTrace());
-			return false;
-		}
-	}
+            if (sb.length() == 0) {
+                currentKey = null;
+                currentValue = null;
+                System.out.println("Finished file " + filmName);
+                return false;
+            }
 
-	@Override
-	public Text getCurrentKey() throws IOException, InterruptedException {
-		return currentKey;
-	}
+            frameCounter++;
 
-	@Override
-	public Text getCurrentValue() throws IOException, InterruptedException {
-		return currentValue;
-	}
+            currentKey = new Text(filmName);
+            currentValue = new Text(sb.toString());
 
-	@Override
-	public void close() throws IOException {
-		taskAttemptContext.setStatus("Closed RecordReader");
-		br.close();
-	}
+            //if (frameCounter % 1000 == 0) {
+            //	System.out.println(filmName + " position " + frameCounter);
+            //}
 
-	@Override
-	public float getProgress() throws IOException, InterruptedException {
-		return 0; //we dont know...
-	}
+            return true;
+        } catch (Exception e) {
+            System.out.println("The file has some problem (maybe not srt?): " + filmName);
+            System.out.println(e.getMessage());
+            System.out.println(e.getStackTrace());
+            return false;
+        }
+    }
+
+    @Override
+    public Text getCurrentKey() throws IOException, InterruptedException {
+        return currentKey;
+    }
+
+    @Override
+    public Text getCurrentValue() throws IOException, InterruptedException {
+        return currentValue;
+    }
+
+    @Override
+    public void close() throws IOException {
+        taskAttemptContext.setStatus("Closed RecordReader");
+        br.close();
+    }
+
+    @Override
+    public float getProgress() throws IOException, InterruptedException {
+        return 0; //we dont know...
+    }
 }

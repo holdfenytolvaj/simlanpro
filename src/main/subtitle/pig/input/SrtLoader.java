@@ -19,42 +19,42 @@ import org.apache.pig.data.TupleFactory;
 import subtitle.hadoop.input.SrtInputFormat;
 
 public class SrtLoader extends LoadFunc {
-	private static final Log LOGGER = LogFactory.getLog(SrtLoader.class);
+    private static final Log LOGGER = LogFactory.getLog(SrtLoader.class);
 
-	private RecordReader<Text, Text> reader;
+    private RecordReader<Text, Text> reader;
 
-	@Override
-	public InputFormat<Text, Text> getInputFormat() {
-		return new SrtInputFormat();
-	}
+    @Override
+    public InputFormat<Text, Text> getInputFormat() {
+        return new SrtInputFormat();
+    }
 
-	@Override
-	public void setLocation(String location, Job job) throws IOException {
-		FileInputFormat.setInputPaths(job, location);
-	}
+    @Override
+    public void setLocation(String location, Job job) throws IOException {
+        FileInputFormat.setInputPaths(job, location);
+    }
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	@Override
-	public void prepareToRead(RecordReader reader, PigSplit split) throws IOException {
-		this.reader = reader;
-	}
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @Override
+    public void prepareToRead(RecordReader reader, PigSplit split) throws IOException {
+        this.reader = reader;
+    }
 
-	@Override
-	public Tuple getNext() throws IOException {
-		try {
-			if (!reader.nextKeyValue()) {
-				return null;
-			}
+    @Override
+    public Tuple getNext() throws IOException {
+        try {
+            if (!reader.nextKeyValue()) {
+                return null;
+            }
 
-			Tuple tuple = createTuple(reader.getCurrentKey().toString(), reader.getCurrentValue().toString());
-			return tuple;
-		} catch (InterruptedException e) {
-			LOGGER.error(e);
-			return null;
-		}
-	}
+            Tuple tuple = createTuple(reader.getCurrentKey().toString(), reader.getCurrentValue().toString());
+            return tuple;
+        } catch (InterruptedException e) {
+            LOGGER.error(e);
+            return null;
+        }
+    }
 
-	public Tuple createTuple(String key, String value) {
-		return TupleFactory.getInstance().newTuple(Arrays.asList(new DataByteArray(key), new DataByteArray(value)));
-	}
+    public Tuple createTuple(String key, String value) {
+        return TupleFactory.getInstance().newTuple(Arrays.asList(new DataByteArray(key), new DataByteArray(value)));
+    }
 }

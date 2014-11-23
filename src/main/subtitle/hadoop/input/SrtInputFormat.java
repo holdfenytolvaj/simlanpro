@@ -10,11 +10,11 @@ import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 
 public class SrtInputFormat extends FileInputFormat<Text, Text> {
 
-	@Override
-	public RecordReader<Text, Text> createRecordReader(InputSplit inputSplit, TaskAttemptContext taskAttemptContext) throws IOException, InterruptedException {
-		SrtRecordReader srtrr = new SrtRecordReader();
-		srtrr.initialize(inputSplit, taskAttemptContext);
-		return srtrr;
-	}
+    @Override
+    public RecordReader<Text, Text> createRecordReader(InputSplit inputSplit, TaskAttemptContext taskAttemptContext) throws IOException, InterruptedException {
+        SrtRecordReader srtrr = new SrtRecordReader();
+        //srtrr.initialize(inputSplit, taskAttemptContext);
+        return srtrr;
+    }
 
 }

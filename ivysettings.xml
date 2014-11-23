@@ -1,0 +1,16 @@
+<ivysettings>
+    <settings defaultResolver="ibiblio"/>
+    
+    <resolvers>
+        <ibiblio name="ibiblio" />
+    
+        <url name="jwi" checksums="" > <!-- turn of checksum -->
+            <artifact pattern="http://projects.csail.mit.edu/jwi/download.php?f=[module]_[revision].jar"  />
+            <artifact pattern="http://projects.csail.mit.edu/jwi/download.php?f=[module]_[revision]_[artifact].jar" />
+        </url>
+    </resolvers>
+    
+    <modules>
+        <module organisation="jwi" resolver="jwi"  />
+    </modules>
+</ivysettings>
