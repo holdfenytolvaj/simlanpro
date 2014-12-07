@@ -21,15 +21,14 @@
         <dependency org="xerces" name="xercesImpl" rev="2.11.0"/>
         
         <!-- === nlp ========================================= -->
-        <!-- coreNLP does not lemmatize comperative adjectives e.g. taller->tall --> 
+        <!-- coreNLP does not lemmatize comperative adjectives e.g. taller->tall -->
         <dependency org="edu.stanford.nlp" name="stanford-corenlp" rev="3.5.0" >
             <artifact type="jar" name="stanford-corenlp" />
             <artifact type="jar" name="stanford-corenlp" m:classifier="models" />
         </dependency>
         
-        <!--
         <dependency org="jwi" name="edu.mit.jwi" rev="2.3.3" />
-        -->
+        
         <!-- === crawler ===================================== -->
         <dependency org="edu.uci.ics" name="crawler4j" rev="3.5"/>
   </dependencies>

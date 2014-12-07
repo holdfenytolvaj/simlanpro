@@ -6,118 +6,133 @@ import java.io.PrintWriter;
 import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
-import java.util.regex.Pattern;
 
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.commons.lang.StringUtils;
 
+import util.UtilProperties;
+
 import com.google.common.collect.MinMaxPriorityQueue;
 
 public class Transformer {
+    private WordFilter filter = new WordFilter();
+    private WordLemmatizer lemmatizer = new WordLemmatizer();
 
-	/**
-	 * Transforms the English frequency list, downloaded from:
-	 * http://ucrel.lancs.ac.uk/bncfreq/
-	 * to a list of top 10K words with frequency and alternatives.
-	 * The output format will be (tab separated)
-	 * [frequency] [main word] [alternatives...]
-	 */
-	public static void main(String[] args) throws FileNotFoundException {
-		Transformer transformer = new Transformer();
-		transformer.save(transformer.load(args[0]), args[1]);
-	}
+    /**
+     * Transforms the English frequency list, downloaded from:
+     * http://ucrel.lancs.ac.uk/bncfreq/
+     * to a list of top 10K words with frequency and alternatives.
+     * The output format will be (tab separated)
+     * [frequency] [main word] [alternatives...]
+     */
+    public static void main(String[] args) throws FileNotFoundException {
+        Transformer transformer = new Transformer();
 
-	private MinMaxPriorityQueue<WordWithFrequency> load(String input) throws FileNotFoundException {
+        String pathToFrequencyList = UtilProperties.get("dictionary.frequencyList.input");
+        String pathToOutput = UtilProperties.get("dictionary.frequencyList.output");
+        transformer.save(transformer.load(pathToFrequencyList), pathToOutput);
+    }
 
-		try (Scanner sc = new Scanner(new FileReader(input))) {
-			MinMaxPriorityQueue<WordWithFrequency> top10K = MinMaxPriorityQueue.maximumSize(10000).create();
+    private MinMaxPriorityQueue<WordWithFrequency> load(String input) throws FileNotFoundException {
 
-			sc.nextLine();
-			String word = sc.next();
-			sc.next(); //word type (not used)
-			String wordVariantOrMark = sc.next();
-			Integer frequency = sc.nextInt();
+        try (Scanner sc = new Scanner(new FileReader(input))) {
+            MinMaxPriorityQueue<WordWithFrequency> top10K = MinMaxPriorityQueue.maximumSize(10000).create();
 
-			while (sc.hasNext()) {
-				WordWithFrequency wwf = new WordWithFrequency(word, frequency);
-				switch (wordVariantOrMark) {
-				case "%":
-					while (true) {
-						//read next
-						sc.nextLine();
-						if (sc.hasNext()) {
-							word = sc.next();
-							sc.next(); //word type (not used)
-							wordVariantOrMark = sc.next();
-							frequency = sc.nextInt();
-						}
-						if ("@".equals(word)) {
-							wwf.addAlternative(wordVariantOrMark);
-						} else {
-							break;
-						}
-					}
+            sc.nextLine();
+            String word = sc.next();
+            String pos = sc.next();
+            String wordVariantOrMark = sc.next();
+            Integer frequency = sc.nextInt();
 
-					break;
-				case ":":
-					//read next
-					sc.nextLine();
-					if (sc.hasNext()) {
-						word = sc.next();
-						sc.next(); //word type (not used)
-						wordVariantOrMark = sc.next();
-						frequency = sc.nextInt();
-					}
-					break;
-				default:
-					throw new NotImplementedException();
-				}
+            /* 
+             * Example records:
+             *  analyzable  Adj :   0   2   0.26
+             *  analyzer    NoC %   0   4   0.38
+             *   @   @   analyzer    0   4   0.43
+             *   @   @   analyzers   0   1   0.00
+             */
+            while (sc.hasNext()) {
+                WordWithFrequency wwf = new WordWithFrequency(word, frequency, pos);
+                switch (wordVariantOrMark) {
+                case "%":
+                    while (true) {
+                        //read next
+                        sc.nextLine();
+                        if (sc.hasNext()) {
+                            word = sc.next();
+                            pos = sc.next();
+                            wordVariantOrMark = sc.next();
+                            frequency = sc.nextInt();
+                        }
+                        if ("@".equals(word)) {
+                            wwf.addAlternative(wordVariantOrMark);
+                        } else {
+                            break;
+                        }
+                    }
 
-				if (wwf.isGood) {
-					top10K.add(wwf);
-				}
-			}
-			return top10K;
-		}
-	}
+                    break;
+                case ":":
+                    //read next
+                    sc.nextLine();
+                    if (sc.hasNext()) {
+                        word = sc.next();
+                        pos = sc.next();
+                        wordVariantOrMark = sc.next();
+                        frequency = sc.nextInt();
+                    }
+                    break;
+                default:
+                    throw new NotImplementedException();
+                }
 
-	private void save(MinMaxPriorityQueue<WordWithFrequency> wordList, String output) throws FileNotFoundException {
-		try (PrintWriter pw = new PrintWriter(output)) {
-			while (!wordList.isEmpty()) {
-				pw.println(wordList.pollFirst());
-			}
-			pw.flush();
-		}
-	}
+                if (wwf.isGood) {
+                    top10K.add(wwf);
+                }
+            }
+            return top10K;
+        }
+    }
 
-	static class WordWithFrequency implements Comparable<WordWithFrequency> {
-		static Pattern containsNumber = Pattern.compile(".*\\d+.*");
-		static Pattern isRomanNumber = Pattern.compile("(v|x|l|c|d|m|ii|iii|iv|vi|vii|viii|ix|xi|xii|xiii|xiv|xv)");
-		static Pattern miscalenaous = Pattern.compile("([^a^o^i^u]|(.*[_&].*))");
+    private void save(MinMaxPriorityQueue<WordWithFrequency> wordList, String output) throws FileNotFoundException {
+        try (PrintWriter pw = new PrintWriter(output)) {
+            while (!wordList.isEmpty()) {
+                pw.println(wordList.pollFirst());
+            }
+            pw.flush();
+        }
+    }
 
-		Set<String> wordListOfVariants = new HashSet<>();
-		final Integer frequency;
-		final boolean isGood;
+    class WordWithFrequency implements Comparable<WordWithFrequency> {
+        Set<String> wordListOfVariants = new HashSet<>();
+        final Integer frequency;
+        final boolean isGood;
+        final String pos;
 
-		WordWithFrequency(String word, Integer frequency) {
-			this.frequency = frequency;
-			wordListOfVariants.add(word.toLowerCase());
-			this.isGood = !containsNumber.matcher(word).matches() && !isRomanNumber.matcher(word).matches() && !miscalenaous.matcher(word).matches();
-		}
+        WordWithFrequency(String word, Integer frequency, String pos) {
+            this.pos = pos;
+            isGood = filter.isGoodWord(word);
+            String lemma = (!isGood ? "" : lemmatizer.getLemma(word.replace(".", ""), pos).toLowerCase());
+            this.frequency = frequency;
+            wordListOfVariants.add(lemma);
+        }
 
-		void addAlternative(String alternativeWord) {
-			wordListOfVariants.add(alternativeWord.toLowerCase());
-		}
+        void addAlternative(String alternativeWord) {
+            if (isGood) {
+                String lemma = lemmatizer.getLemma(alternativeWord.replace(".", ""), pos).toLowerCase();
+                wordListOfVariants.add(lemma);
+            }
+        }
 
-		@Override
-		public int compareTo(WordWithFrequency o) {
-			return o.frequency.compareTo(this.frequency);
-		}
+        @Override
+        public int compareTo(WordWithFrequency o) {
+            return o.frequency.compareTo(this.frequency);
+        }
 
-		@Override
-		public String toString() {
-			return "" + frequency + "\t" + StringUtils.join(wordListOfVariants.toArray(), "\t");
-		}
-	}
+        @Override
+        public String toString() {
+            return "" + frequency + "\t" + StringUtils.join(wordListOfVariants.toArray(), "\t");
+        }
+    }
 
 }

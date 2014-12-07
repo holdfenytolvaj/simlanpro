@@ -8,14 +8,13 @@ Need the following libs in the path:
 */
 
 REGISTER ../simlanpro.jar;
-DEFINE GET_LANG_LEVELS subtitle.pig.udf.GetLanguageLevelOfTextEn();
+DEFINE GET_LANG_LEVELS subtitle.pig.udf.GetLanguageLevelOfTextEnByWord();
 
--- textByFrame = load 'subtitle/en/sample' using subtitle.pig.input.SrtLoader() as (filmName: chararray, content: chararray);
-textByFrame = load 'subtitle/en/all/' using subtitle.pig.input.SrtLoader() as (filmName: chararray, content: chararray);
--- textByFrame = load 'subtitle/en/debug/' using subtitle.pig.input.SrtLoader() as (filmName: chararray, content: chararray);
+-- textByFrame = load '~/cirkalo/crawler/subtitles/en/sample/' using subtitle.pig.input.SrtLoader() as (filmName: chararray, content: chararray);
+-- textByFrame = load '~/cirkalo/crawler/subtitles/en/all_1/' using subtitle.pig.input.SrtLoader() as (filmName: chararray, content: chararray);
+textByFrame = load '/subtitle/en/sample2/' using subtitle.pig.input.SrtLoader() as (filmName: chararray, content: chararray);
 
-levelsByFrame = FOREACH textByFrame GENERATE content, FLATTEN(GET_LANG_LEVELS(filmName, content));
-dump levelsByFrame;
+levelsByFrame = FOREACH textByFrame GENERATE FLATTEN(GET_LANG_LEVELS(filmName, content));
 
 levelsByFilm = group levelsByFrame by id;
 levelsByFilmSum = FOREACH levelsByFilm GENERATE group,
@@ -37,7 +36,8 @@ result = FOREACH levelsByFilmSum GENERATE group..,
 
 resultByl6  = order result by l6p;
 
-STORE resultByl6 INTO 'subtitle/en/outv2/' USING PigStorage ('\t');
+-- STORE resultByl6 INTO '~/cirkalo/crawler/subtitles/en/out_1/' USING PigStorage ('\t');
+STORE resultByl6 INTO '/subtitle/en/sample2_out3' USING PigStorage ('\t');
 
 
 
